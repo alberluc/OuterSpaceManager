@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/textViewMainUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Username"/>
+        <TextView
+            android:id="@+id/textViewMainScore"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Score"/>
+        <Button
+            android:id="@+id/buttonMainGeneral"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/main_general"/>
+        <Button
+            android:id="@+id/buttonMainBuilding"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/main_building"/>
+        <Button
+            android:id="@+id/buttonMainShip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/main_ship"/>
+        <Button
+            android:id="@+id/buttonMainSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/main_search"/>
+        <Button
+            android:id="@+id/buttonMainSpaceConstruction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/main_space_construction"/>
+        <Button
+            android:id="@+id/buttonMainSpace"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/main_space"/>
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

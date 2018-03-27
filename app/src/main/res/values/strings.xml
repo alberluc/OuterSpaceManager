@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Outer Space Manager</string>
+    <string name="user_name">Nom d\'utilisateur</string>
+    <string name="user_password">Mot de passe</string>
+    <string name="user_mail">Email</string>
+    <string name="title_login">Se connecter</string>
+    <string name="title_signin">S\'inscrire</string>
+    <string name="validate">Valider</string>
+    <string name="success_login">Vous êtes connecté</string>
+    <string name="unauthorized_login">Identifiants invalides</string>
+    <string name="server_not_respond">Le serveur de répond pas</string>
+    <string name="signin_success">Inscription réussie</string>
+    <string name="bad_request_signin">Le mail ou le username existe déjà</string>
+    <string name="unauthorized_signin">Identifiants invalides</string>
+    <string name="main_general">Vue générale</string>
+    <string name="main_building">Bâtiments</string>
+    <string name="main_ship">Flotte</string>
+    <string name="main_search">Recherches</string>
+    <string name="main_space_construction">Chantier spatial</string>
+    <string name="main_space">Galaxie</string>
+</resources>
