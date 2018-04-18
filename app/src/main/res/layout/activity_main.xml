@@ -46,5 +46,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/main_space"/>
+        <Button
+            android:id="@+id/buttonLogout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/title_logout"/>
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

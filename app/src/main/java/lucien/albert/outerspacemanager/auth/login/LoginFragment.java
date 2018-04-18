@@ -1,6 +1,5 @@
 package lucien.albert.outerspacemanager.auth.login;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,9 +11,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import lucien.albert.outerspacemanager.R;
+import lucien.albert.outerspacemanager.api.models.TokenModel;
+import lucien.albert.outerspacemanager.auth.AuthActivity;
 import lucien.albert.outerspacemanager.auth.AuthViewFragmentsInterface;
-import lucien.albert.outerspacemanager.auth.user.AuthModel;
-import lucien.albert.outerspacemanager.main.MainActivity;
+import lucien.albert.outerspacemanager.api.models.AuthModel;
 
 public class LoginFragment extends Fragment implements AuthViewFragmentsInterface, View.OnClickListener {
 
@@ -50,12 +50,11 @@ public class LoginFragment extends Fragment implements AuthViewFragmentsInterfac
     }
 
     @Override
-    public void onAuthSuccess (AuthModel authModel)
+    public void onAuthSuccess (TokenModel tokenModel)
     {
         Toast.makeText(this.getContext(), R.string.success_login, Toast.LENGTH_SHORT).show();
-        authModel.storeToken(this.getContext());
-        Intent mainIntent = new Intent(this.getContext(), MainActivity.class);
-        this.startActivity(mainIntent);
+        AuthModel.storeToken(this.getContext(), tokenModel.getToken());
+        ((AuthActivity) this.getActivity()).startMainActivity();
     }
 
     @Override

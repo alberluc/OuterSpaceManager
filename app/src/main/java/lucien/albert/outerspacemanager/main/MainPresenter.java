@@ -1,10 +1,12 @@
 package lucien.albert.outerspacemanager.main;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
-import lucien.albert.outerspacemanager.auth.user.AuthModel;
-import lucien.albert.outerspacemanager.auth.user.UserModel;
-import lucien.albert.outerspacemanager.services.OuterSpaceManagerService;
+import lucien.albert.outerspacemanager.Config;
+import lucien.albert.outerspacemanager.api.models.AuthModel;
+import lucien.albert.outerspacemanager.api.models.UserModel;
+import lucien.albert.outerspacemanager.api.services.OuterSpaceManagerService;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -20,8 +22,7 @@ public class MainPresenter implements MainPresenterInterface, Callback<UserModel
     }
 
     @Override
-    public void getUser(Context context) {
-        String token = new AuthModel().getToken(context);
+    public void getUser(String token) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(OuterSpaceManagerService.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -29,6 +30,11 @@ public class MainPresenter implements MainPresenterInterface, Callback<UserModel
         OuterSpaceManagerService osmService = retrofit.create(OuterSpaceManagerService.class);
         Call<UserModel> request = osmService.getUser(token);
         request.enqueue(this);
+    }
+
+    @Override
+    public boolean checkUserHasToken(String token) {
+        return !token.equals("");
     }
 
     @Override

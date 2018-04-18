@@ -1,16 +1,17 @@
 package lucien.albert.outerspacemanager.auth.signin;
 
+import lucien.albert.outerspacemanager.api.models.AuthUserModel;
+import lucien.albert.outerspacemanager.api.models.TokenModel;
 import lucien.albert.outerspacemanager.auth.AuthViewFragmentsInterface;
-import lucien.albert.outerspacemanager.auth.user.AuthModel;
-import lucien.albert.outerspacemanager.auth.user.UserModel;
-import lucien.albert.outerspacemanager.services.OuterSpaceManagerService;
+import lucien.albert.outerspacemanager.api.models.UserModel;
+import lucien.albert.outerspacemanager.api.services.OuterSpaceManagerService;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-class SignUpPresenter implements SignUpPresenterInterface, Callback<AuthModel>  {
+class SignUpPresenter implements SignUpPresenterInterface, Callback<TokenModel>  {
 
     private AuthViewFragmentsInterface authViewFragments;
 
@@ -21,18 +22,18 @@ class SignUpPresenter implements SignUpPresenterInterface, Callback<AuthModel>  
     @Override
     public void signup(String username, String email, String password)
     {
-        UserModel user = new UserModel(username, email, password);
+        AuthUserModel user = new AuthUserModel(username, email, password);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(OuterSpaceManagerService.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         OuterSpaceManagerService osmService = retrofit.create(OuterSpaceManagerService.class);
-        Call<AuthModel> request = osmService.createUser(user);
+        Call<TokenModel> request = osmService.createUser(user);
         request.enqueue(this);
     }
 
     @Override
-    public void onResponse(Call<AuthModel> call, Response<AuthModel> response)
+    public void onResponse(Call<TokenModel> call, Response<TokenModel> response)
     {
         if (response.isSuccessful()) {
             this.authViewFragments.onAuthSuccess(response.body());
@@ -44,7 +45,7 @@ class SignUpPresenter implements SignUpPresenterInterface, Callback<AuthModel>  
     }
 
     @Override
-    public void onFailure(Call<AuthModel> call, Throwable t)
+    public void onFailure(Call<TokenModel> call, Throwable t)
     {
         this.authViewFragments.onAuthFailure(504);
     }

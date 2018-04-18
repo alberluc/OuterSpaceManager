@@ -9,29 +9,21 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 
 import lucien.albert.outerspacemanager.R;
-import lucien.albert.outerspacemanager.auth.user.AuthModel;
-import lucien.albert.outerspacemanager.auth.user.AuthUserModel;
-import lucien.albert.outerspacemanager.auth.user.UserModel;
+import lucien.albert.outerspacemanager.api.models.AuthModel;
+import lucien.albert.outerspacemanager.api.models.TokenModel;
 import lucien.albert.outerspacemanager.main.MainActivity;
 
-public class AuthActivity extends FragmentActivity implements AuthViewInterface {
+public class AuthActivity extends FragmentActivity implements AuthViewFragmentsInterface {
 
     private ViewPager authPager;
     private PagerAdapter authPagerAdapter;
     private TabLayout authTabs;
-    private AuthPresenter authPresenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_auth);
-
-        this.authPresenter = new AuthPresenter(this);
-        if (this.authPresenter.checkUserHasToken(this.getApplicationContext())) {
-            Intent mainIntent = new Intent(this.getApplicationContext(), MainActivity.class);
-            this.startActivity(mainIntent);
-        }
 
         this.authPager = this.findViewById(R.id.authPager);
         this.authTabs = this.findViewById(R.id.authTabs);
@@ -50,5 +42,21 @@ public class AuthActivity extends FragmentActivity implements AuthViewInterface 
             this.authPager.setCurrentItem(this.authPager.getCurrentItem() - 1);
         }
     }
+
+    public void startMainActivity ()
+    {
+        Intent mainIntent = new Intent(this.getApplicationContext(), MainActivity.class);
+        this.startActivity(mainIntent);
+        this.finish();
+    }
+
+    @Override
+    public void onAuthSuccess(TokenModel tokenModel) {}
+
+    @Override
+    public void onAuthFailure(int code) {}
+
+    @Override
+    public void resetFields() {}
 
 }
