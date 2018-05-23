@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import io.realm.Realm;
 import lucien.albert.outerspacemanager.Config;
 import lucien.albert.outerspacemanager.R;
 import lucien.albert.outerspacemanager.api.models.AuthModel;
@@ -35,6 +36,8 @@ public class MainActivity extends AppCompatActivity implements MainViewInterface
     {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_main);
+
+        Realm.init(this.getApplicationContext());
 
         String token = AuthModel.getToken(this.getApplicationContext());
 
@@ -63,14 +66,14 @@ public class MainActivity extends AppCompatActivity implements MainViewInterface
     public void onUserExist(UserModel user)
     {
         this.textViewMainUsername.setText(user.getUsername());
-        this.textViewMainScore.setText(user.getPoints().toString());
+        this.textViewMainScore.setText(String.valueOf(user.getPoints()));
     }
 
     @Override
-    public void onUserNotExist() {}
+    public void onUserNotExist () {}
 
     @Override
-    public void onClick(View v)
+    public void onClick (View v)
     {
         if (v.getId() == this.buttonLogout.getId()) {
             AuthModel.removeUserToken(this.getApplicationContext());

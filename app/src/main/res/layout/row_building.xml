@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_gravity="center">
     <ImageView
         android:id="@+id/imageViewRowBuilding"
@@ -12,10 +12,61 @@
         android:id="@+id/textViewRowBuildingName"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignBottom="@id/imageViewRowBuilding"
-        android:padding="10dp"
-        android:textColor="@android:color/white"
         android:textSize="18sp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:paddingBottom="3dp"
+        android:textColor="@android:color/white" />
+    <LinearLayout
+        android:id="@+id/row_building_state_stopping"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
+            <TextView
+                android:id="@+id/textViewBuildingLevel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white" />
+            <TextView
+                android:id="@+id/textViewBuildingResource"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"/>
+            <TextView
+                android:id="@+id/textViewBuildingTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            android:layout_alignParentBottom="true">
+            <Button
+                android:id="@+id/buttonActionBuilding"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/row_building_icon_tool_descr"/>
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/row_building_state_building">
+        <com.github.guilhe.circularprogressview.CircularProgressView
+            android:id="@+id/row_building_progress"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:progressBarThickness="10dp"
+            app:progressBarColor="@android:color/holo_purple"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/row_building_state_building_label"/>
+    </LinearLayout>
 </RelativeLayout>

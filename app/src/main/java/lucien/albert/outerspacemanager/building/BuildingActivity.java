@@ -1,27 +1,27 @@
 package lucien.albert.outerspacemanager.building;
 
 import android.app.Activity;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
 
 import lucien.albert.outerspacemanager.R;
-import lucien.albert.outerspacemanager.api.arrayadapter.BuildingsListArrayAdapter;
+import lucien.albert.outerspacemanager.api.arrayadapter.BuildingAdapter;
 import lucien.albert.outerspacemanager.api.dialog.BuildActionDialog;
+import lucien.albert.outerspacemanager.api.dialog.BuildActionDialogInterface;
 import lucien.albert.outerspacemanager.api.models.AuthModel;
 import lucien.albert.outerspacemanager.api.models.BuildingModel;
 import lucien.albert.outerspacemanager.api.models.BuildingsListModel;
 
-public class BuildingActivity extends Activity implements BuildingViewInterface, AdapterView.OnItemClickListener {
+public class BuildingActivity extends Activity implements BuildingViewInterface {
 
     BuildingPresenterInterface buildingPresenter;
-    ListView listViewBuildings;
+    RecyclerView recyclerViewBuildings;
     BuildingsListModel buildingsListModel;
-    BuildingsListArrayAdapter buildingsListArrayAdapter;
+    BuildingAdapter buildingAdapter;
     BuildActionDialog buildActionDialog;
+    BuildingModel buildingModelClicked;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -33,31 +33,48 @@ public class BuildingActivity extends Activity implements BuildingViewInterface,
         this.buildingPresenter.getBuildingsList(AuthModel.getToken(this.getApplicationContext()));
         this.buildingsListModel = new BuildingsListModel();
 
-        this.listViewBuildings = this.findViewById(R.id.listViewBuildings);
+        this.recyclerViewBuildings = this.findViewById(R.id.recyclerViewBuildings);
+        this.recyclerViewBuildings.setHasFixedSize(true);
+        LinearLayoutManager layoutManagerBuilding = new LinearLayoutManager(this);
+        this.recyclerViewBuildings.setLayoutManager(layoutManagerBuilding);
 
-        this.buildActionDialog = new BuildActionDialog(this);
 
-        this.buildingsListArrayAdapter = new BuildingsListArrayAdapter(this.getApplicationContext(), this.buildingsListModel.getBuildings());
-        this.listViewBuildings.setAdapter(buildingsListArrayAdapter);
-        this.listViewBuildings.setOnItemClickListener(this);
+        this.buildingAdapter = new BuildingAdapter(this.getApplicationContext(), this.buildingsListModel.getBuildings(), this);
+        this.recyclerViewBuildings.setAdapter(this.buildingAdapter);
     }
 
     @Override
     public void onBuildingsListSuccess (BuildingsListModel buildingsListModel)
     {
-        this.buildingsListModel = buildingsListModel;
-        this.buildingsListArrayAdapter.addAll(this.buildingsListModel.getBuildings());
-        this.buildingsListArrayAdapter.notifyDataSetChanged();
+        this.buildingAdapter.addAll(buildingsListModel);
+        this.buildingAdapter.notifyDataSetChanged();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-    {
-        BuildingModel buildingModel = this.buildingsListModel.getBuildings().get(position);
+    public void onClickItem (final BuildingModel buildingModel) {
         if (buildingModel.isBuildable()) {
-
+            this.buildingModelClicked = buildingModel;
+            this.buildActionDialog = new BuildActionDialog(this, new BuildActionDialogInterface() {
+                @Override
+                public void onClickPositiveCreateBuilding() {
+                    BuildingActivity.this.buildingPresenter.createBuilding(AuthModel.getToken(getApplicationContext()), buildingModel);
+                    // todo: Faire une callback pour récuperer le building crée et changer son état
+                }
+                @Override
+                public void onClickNegativeCreateBuilding() {}
+            });
+            this.buildActionDialog.show();
         }
+    }
+
+    @Override
+    public void onBuildingCreateSuccess () {
+        Toast.makeText(this.getApplicationContext(), "Succès", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onBuildingCreateFailure () {
+        Toast.makeText(this.getApplicationContext(), "Echec", Toast.LENGTH_SHORT).show();
     }
 
 }

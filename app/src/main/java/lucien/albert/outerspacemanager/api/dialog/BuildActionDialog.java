@@ -6,6 +6,7 @@ import android.support.v7.app.AlertDialog;
 import android.widget.Toast;
 
 import lucien.albert.outerspacemanager.R;
+import lucien.albert.outerspacemanager.building.BuildingViewInterface;
 
 /**
  * Created by lalbert on 18/04/2018.
@@ -13,11 +14,13 @@ import lucien.albert.outerspacemanager.R;
 
 public class BuildActionDialog implements DialogInterface.OnClickListener {
 
+    private BuildActionDialogInterface buildActionDialog;
     private Context context;
 
-    public BuildActionDialog (Context context)
+    public BuildActionDialog (Context context, BuildActionDialogInterface buildActionDialog)
     {
         this.context = context;
+        this.buildActionDialog = buildActionDialog;
     }
 
     public void show ()
@@ -36,23 +39,14 @@ public class BuildActionDialog implements DialogInterface.OnClickListener {
     {
         switch (which) {
             case DialogInterface.BUTTON_POSITIVE : {
-                this.handlePositiveResponse();
+                this.buildActionDialog.onClickPositiveCreateBuilding();
                 break;
             }
             case DialogInterface.BUTTON_NEGATIVE : {
-                this.handleNegativeResponse();
+                this.buildActionDialog.onClickNegativeCreateBuilding();
                 break;
             }
         }
     }
 
-    private void handleNegativeResponse ()
-    {
-        Toast.makeText(this.context, "Negative", Toast.LENGTH_SHORT).show();
-    }
-
-    private void handlePositiveResponse ()
-    {
-        Toast.makeText(this.context, "Positive", Toast.LENGTH_SHORT).show();
-    }
 }

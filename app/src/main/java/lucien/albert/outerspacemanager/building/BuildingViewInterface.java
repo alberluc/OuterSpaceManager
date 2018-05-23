@@ -1,5 +1,6 @@
 package lucien.albert.outerspacemanager.building;
 
+import lucien.albert.outerspacemanager.api.models.BuildingModel;
 import lucien.albert.outerspacemanager.api.models.BuildingsListModel;
 
 /**
@@ -9,5 +10,11 @@ import lucien.albert.outerspacemanager.api.models.BuildingsListModel;
 public interface BuildingViewInterface {
 
     public void onBuildingsListSuccess (BuildingsListModel buildingsListModel);
+
+    public void onBuildingCreateSuccess ();
+
+    public void onBuildingCreateFailure ();
+
+    public void onClickItem (BuildingModel building);
 
 }

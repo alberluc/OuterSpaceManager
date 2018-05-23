@@ -3,7 +3,7 @@ package lucien.albert.outerspacemanager.api.models;
 public class UserModel {
 
     private String username;
-    private Integer points;
+    private long points;
     private Float gas;
     private Integer gasModifier;
     private Float minerals;
@@ -19,12 +19,12 @@ public class UserModel {
         this.username = username;
     }
 
-    public Integer getPoints ()
+    public long getPoints ()
     {
         return points;
     }
 
-    public void setPoints (Integer points)
+    public void setPoints (long points)
     {
         this.points = points;
     }

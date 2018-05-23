@@ -36,5 +36,12 @@
     <!--> Alert titles <-->
     <string name="alert_build_action_title">Construction</string>
     <string name="alert_build_action_message">Message</string>
+    <string name="resource_meniral">minéraux</string>
+    <string name="resource_gas">gaz</string>
+    <string name="resource_label_level">Niveau</string>
+    <string name="building_label_level">Niveau</string>
+    <string name="building_label_resource">Resources</string>
+    <string name="building_label_time">Temps</string>
+    <string name="row_building_state_building_label">En construction...</string>
 
 </resources>

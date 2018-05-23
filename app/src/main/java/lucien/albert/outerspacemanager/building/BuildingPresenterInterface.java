@@ -13,4 +13,6 @@ public interface BuildingPresenterInterface {
 
     public void getBuildingsList (String token);
 
+    public void createBuilding (String token, BuildingModel buildingModel);
+
 }

@@ -15,9 +15,10 @@
             android:layout_height="wrap_content"
             android:text="@string/title_buildings"
             style="@style/Title" />
-        <ListView
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerViewBuildings"
+            android:scrollbars="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/listViewBuildings"/>
+            android:layout_height="match_parent"/>
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

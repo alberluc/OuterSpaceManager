@@ -10,6 +10,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 public interface OuterSpaceManagerService {
 
@@ -28,5 +29,8 @@ public interface OuterSpaceManagerService {
 
     @GET("v1/buildings/list")
     public Call<BuildingsListModel> getBuildingsList (@Header("x-access-token") String token);
+
+    @POST("v1/buildings/create/{buildingId}")
+    public Call<Object> createBuilding (@Header("x-access-token") String token, @Path("buildingId") Integer buildingId);
 
 }

@@ -1,11 +1,20 @@
 package lucien.albert.outerspacemanager.api.models;
 
-public class BuildingModel {
+import android.content.Context;
 
+import java.util.Date;
+
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+import lucien.albert.outerspacemanager.R;
+
+public class BuildingModel extends RealmObject {
+
+    @PrimaryKey
+    private Integer buildingId;
     private Integer level;
     private Integer amountOfEffectByLevel;
     private Integer amountOfEffectLevel0;
-    private Integer buildingId;
     private Boolean building;
     private String effect;
     private Integer gasCostByLevel;
@@ -16,6 +25,7 @@ public class BuildingModel {
     private String name;
     private Integer timeToBuildByLevel;
     private Integer timeToBuildLevel0;
+    private Date lastDateBuild;
 
     public Integer getLevel ()
     {
@@ -157,8 +167,42 @@ public class BuildingModel {
         this.timeToBuildLevel0 = timeToBuildLevel0;
     }
 
+    public Date getLastDateBuild () {
+        return lastDateBuild;
+    }
+
+    public void setLastDateBuild (Date lastDateBuild) {
+        this.lastDateBuild = lastDateBuild;
+    }
+
     public boolean isBuildable ()
     {
         return true;
     }
+
+    public long getTimeToBuild () {
+        return this.getTimeToBuildLevel0() + (this.getTimeToBuildByLevel() * this.getLevel());
+    }
+
+    public long getGasToBuild () {
+        return this.getGasCostLevel0() + (this.getGasCostByLevel() * this.getLevel());
+    }
+
+    public long getMineralToBuild () {
+        return this.getMineralCostLevel0() + (this.getMineralCostByLevel() * this.getLevel());
+    }
+
+    public String getResourceString (Context context) {
+        String resourceString = this.getMineralToBuild() + " " + context.getResources().getString(R.string.resource_meniral) + " - " + this.getGasToBuild() + ' ' + context.getResources().getString(R.string.resource_gas);
+        return context.getResources().getString(R.string.building_label_resource) + " : "  + resourceString;
+    }
+
+    public String levelToString (Context context) {
+        return context.getResources().getString(R.string.building_label_level) + " : " + String.valueOf(this.getLevel());
+    }
+
+    public String timeToString (Context context) {
+        return context.getResources().getString(R.string.building_label_time) + " : "  + String.valueOf(this.getTimeToBuild());
+    }
+
 }
