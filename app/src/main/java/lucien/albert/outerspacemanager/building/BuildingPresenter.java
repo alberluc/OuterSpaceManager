@@ -1,16 +1,11 @@
 package lucien.albert.outerspacemanager.building;
 
-import android.content.Context;
+import android.os.Build;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-
-import io.realm.Realm;
-import lucien.albert.outerspacemanager.api.models.AuthModel;
 import lucien.albert.outerspacemanager.api.models.BuildingModel;
 import lucien.albert.outerspacemanager.api.models.BuildingsListModel;
 import lucien.albert.outerspacemanager.api.services.OuterSpaceManagerService;
+import lucien.albert.outerspacemanager.dao.BuildingDAO;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -20,10 +15,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class BuildingPresenter implements BuildingPresenterInterface{
 
     BuildingViewInterface buildingView;
+    BuildingDAO buildingDAO;
 
     public BuildingPresenter(BuildingViewInterface buildingView)
     {
         this.buildingView = buildingView;
+        this.buildingDAO = new BuildingDAO();
     }
 
     @Override
@@ -49,7 +46,7 @@ public class BuildingPresenter implements BuildingPresenterInterface{
     }
 
     @Override
-    public void createBuilding(String token, final BuildingModel buildingModel) {
+    public void createBuilding(String token, final BuildingModel buildingModel, final Integer position) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(OuterSpaceManagerService.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -60,8 +57,8 @@ public class BuildingPresenter implements BuildingPresenterInterface{
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
                 if (response.isSuccessful()) {
-                    BuildingPresenter.this.buildingView.onBuildingCreateSuccess();
-                    BuildingPresenter.this.createBuildingRealm(buildingModel);
+                    BuildingPresenter.this.buildingDAO.createBuilding(buildingModel);
+                    BuildingPresenter.this.buildingView.onBuildingCreateSuccess(position);
                 }
                 else BuildingPresenter.this.buildingView.onBuildingCreateFailure();
             }
@@ -69,13 +66,6 @@ public class BuildingPresenter implements BuildingPresenterInterface{
             @Override
             public void onFailure(Call<Object> call, Throwable t) {}
         });
-    }
-
-    private void createBuildingRealm (BuildingModel buildingModel) {
-        Realm realm = Realm.getDefaultInstance();
-        BuildingModel buildingModelRealm = realm.createObject(BuildingModel.class, buildingModel.getBuildingId());
-        buildingModelRealm.setLastDateBuild(Calendar.getInstance().getTime());
-        realm.insertOrUpdate(buildingModelRealm);
     }
 
 }

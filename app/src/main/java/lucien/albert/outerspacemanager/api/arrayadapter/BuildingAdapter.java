@@ -2,6 +2,7 @@ package lucien.albert.outerspacemanager.api.arrayadapter;
 
 
 import android.content.Context;
+import android.os.CountDownTimer;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.github.guilhe.circularprogressview.CircularProgressView;
 
 import java.util.List;
 
@@ -30,18 +32,55 @@ public class BuildingAdapter extends RecyclerView.Adapter<BuildingAdapter.ViewHo
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.textViewRowBuildingName) TextView textViewRowBuildingName;
-        @BindView(R.id.imageViewRowBuilding) ImageView imageViewRowBuilding;
-        @BindView(R.id.textViewBuildingLevel) TextView textViewBuildingLevel;
-        @BindView(R.id.textViewBuildingResource) TextView textViewBuildingResource;
-        @BindView(R.id.textViewBuildingTime) TextView textViewBuildingTime;
-        @BindView(R.id.buttonActionBuilding) Button buttonActionBuilding;
-        @BindView(R.id.row_building_state_stopping) LinearLayout layoutStateStopping;
-        @BindView(R.id.row_building_state_building) LinearLayout layoutStateBuilding;
+        private static final int STATE_STOPPING = 1;
+        private static final int STATE_BUILDING = 2;
+
+        @BindView(R.id.textViewRowBuildingName) public TextView textViewRowBuildingName;
+        @BindView(R.id.imageViewRowBuilding) public ImageView imageViewRowBuilding;
+        @BindView(R.id.textViewBuildingLevel) public TextView textViewBuildingLevel;
+        @BindView(R.id.textViewBuildingResource) public TextView textViewBuildingResource;
+        @BindView(R.id.textViewBuildingTime) public TextView textViewBuildingTime;
+        @BindView(R.id.buttonActionBuilding) public Button buttonActionBuilding;
+        @BindView(R.id.row_building_state_stopping) public LinearLayout layoutStateStopping;
+        @BindView(R.id.row_building_state_building) public LinearLayout layoutStateBuilding;
+        @BindView(R.id.row_building_progress) public CircularProgressView circleProgressBuidling;
+
+        private CountDownTimer countDownTimer;
 
         public ViewHolder (View v) {
             super(v);
             ButterKnife.bind(this, v);
+        }
+
+        public void setState (Integer state, BuildingModel buildingModel) {
+            switch (state) {
+                case ViewHolder.STATE_BUILDING: {
+                    this.layoutStateStopping.setVisibility(View.INVISIBLE);
+                    this.layoutStateBuilding.setVisibility(View.VISIBLE);
+                    this.initStateBuilding(buildingModel);
+                    break;
+                }
+                case ViewHolder.STATE_STOPPING: {
+                    this.layoutStateStopping.setVisibility(View.VISIBLE);
+                    this.layoutStateBuilding.setVisibility(View.INVISIBLE);
+                    break;
+                }
+            }
+        }
+
+        public void initStateBuilding (final BuildingModel buildingModel) {
+            ViewHolder.this.circleProgressBuidling.setProgress(buildingModel.getRemainingTime());
+            ViewHolder.this.countDownTimer = new CountDownTimer(30000, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    ViewHolder.this.circleProgressBuidling.setProgress(buildingModel.getRemainingTime());
+                }
+
+                @Override
+                public void onFinish() {
+                    ViewHolder.this.countDownTimer.start();
+                }
+            };
         }
 
     }
@@ -59,7 +98,7 @@ public class BuildingAdapter extends RecyclerView.Adapter<BuildingAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder (final ViewHolder holder, int position) {
+    public void onBindViewHolder (final ViewHolder holder, final int position) {
         final BuildingModel building = this.buildings.get(position);
         Glide.with(this.context).load(building.getImageUrl()).into(holder.imageViewRowBuilding);
         holder.textViewRowBuildingName.setText(building.getName());
@@ -69,16 +108,14 @@ public class BuildingAdapter extends RecyclerView.Adapter<BuildingAdapter.ViewHo
         holder.buttonActionBuilding.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BuildingAdapter.this.buildingView.onClickItem(building);
+                BuildingAdapter.this.buildingView.onClickItem(building, position);
             }
         });
         if (building.getBuilding()) {
-            holder.layoutStateStopping.setVisibility(View.INVISIBLE);
-            holder.layoutStateBuilding.setVisibility(View.VISIBLE);
+            holder.setState(ViewHolder.STATE_BUILDING, building);
         }
         else {
-            holder.layoutStateStopping.setVisibility(View.VISIBLE);
-            holder.layoutStateBuilding.setVisibility(View.INVISIBLE);
+            holder.setState(ViewHolder.STATE_STOPPING, null);
         }
     }
 

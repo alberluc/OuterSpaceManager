@@ -2,6 +2,7 @@ package lucien.albert.outerspacemanager.api.models;
 
 import android.content.Context;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import io.realm.RealmObject;
@@ -203,6 +204,11 @@ public class BuildingModel extends RealmObject {
 
     public String timeToString (Context context) {
         return context.getResources().getString(R.string.building_label_time) + " : "  + String.valueOf(this.getTimeToBuild());
+    }
+
+    public Float getRemainingTime () {
+        long diff = Calendar.getInstance().getTime().getTime() - this.getLastDateBuild().getTime();
+        return (float) diff / this.getTimeToBuild();
     }
 
 }

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.Toast;
 
 import lucien.albert.outerspacemanager.R;
@@ -38,7 +39,6 @@ public class BuildingActivity extends Activity implements BuildingViewInterface 
         LinearLayoutManager layoutManagerBuilding = new LinearLayoutManager(this);
         this.recyclerViewBuildings.setLayoutManager(layoutManagerBuilding);
 
-
         this.buildingAdapter = new BuildingAdapter(this.getApplicationContext(), this.buildingsListModel.getBuildings(), this);
         this.recyclerViewBuildings.setAdapter(this.buildingAdapter);
     }
@@ -51,15 +51,15 @@ public class BuildingActivity extends Activity implements BuildingViewInterface 
     }
 
     @Override
-    public void onClickItem (final BuildingModel buildingModel) {
+    public void onClickItem (final BuildingModel buildingModel, final Integer position) {
         if (buildingModel.isBuildable()) {
             this.buildingModelClicked = buildingModel;
             this.buildActionDialog = new BuildActionDialog(this, new BuildActionDialogInterface() {
                 @Override
                 public void onClickPositiveCreateBuilding() {
-                    BuildingActivity.this.buildingPresenter.createBuilding(AuthModel.getToken(getApplicationContext()), buildingModel);
-                    // todo: Faire une callback pour récuperer le building crée et changer son état
+                    BuildingActivity.this.buildingPresenter.createBuilding(AuthModel.getToken(getApplicationContext()), buildingModel, position);
                 }
+
                 @Override
                 public void onClickNegativeCreateBuilding() {}
             });
@@ -68,7 +68,10 @@ public class BuildingActivity extends Activity implements BuildingViewInterface 
     }
 
     @Override
-    public void onBuildingCreateSuccess () {
+    public void onBuildingCreateSuccess (Integer position) {
+        BuildingAdapter.ViewHolder view = (BuildingAdapter.ViewHolder) this.recyclerViewBuildings.findViewHolderForAdapterPosition(position);
+        view.layoutStateBuilding.setVisibility(View.VISIBLE);
+        view.layoutStateStopping.setVisibility(View.INVISIBLE);
         Toast.makeText(this.getApplicationContext(), "Succès", Toast.LENGTH_SHORT).show();
     }
 

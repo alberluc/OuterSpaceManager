@@ -11,10 +11,10 @@ public interface BuildingViewInterface {
 
     public void onBuildingsListSuccess (BuildingsListModel buildingsListModel);
 
-    public void onBuildingCreateSuccess ();
+    public void onBuildingCreateSuccess (Integer position);
 
     public void onBuildingCreateFailure ();
 
-    public void onClickItem (BuildingModel building);
+    public void onClickItem (BuildingModel building, Integer position);
 
 }
