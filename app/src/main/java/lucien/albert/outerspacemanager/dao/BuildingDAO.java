@@ -11,4 +11,8 @@ public class BuildingDAO extends DAO {
         this.realm.commitTransaction();
     }
 
+    public BuildingModel getById (Integer id) {
+        return this.realm.where(BuildingModel.class).equalTo("buildingId", id).findFirst();
+    }
+
 }

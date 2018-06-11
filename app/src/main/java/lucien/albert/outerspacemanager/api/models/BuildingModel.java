@@ -8,6 +8,7 @@ import java.util.Date;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 import lucien.albert.outerspacemanager.R;
+import lucien.albert.outerspacemanager.dao.BuildingDAO;
 
 public class BuildingModel extends RealmObject {
 
@@ -208,7 +209,14 @@ public class BuildingModel extends RealmObject {
 
     public Float getRemainingTime () {
         long diff = Calendar.getInstance().getTime().getTime() - this.getLastDateBuild().getTime();
-        return (float) diff / this.getTimeToBuild();
+        float r = (float) diff / this.getTimeToBuild();
+        return r;
+    }
+
+    public void completeFromRealm () {
+        BuildingDAO buildingDAO = new BuildingDAO();
+        BuildingModel buildingRealm = buildingDAO.getById(this.getBuildingId());
+        this.setLastDateBuild(buildingRealm.getLastDateBuild());
     }
 
 }

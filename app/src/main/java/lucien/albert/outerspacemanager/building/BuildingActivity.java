@@ -68,10 +68,9 @@ public class BuildingActivity extends Activity implements BuildingViewInterface 
     }
 
     @Override
-    public void onBuildingCreateSuccess (Integer position) {
+    public void onBuildingCreateSuccess (Integer position, BuildingModel buildingModel) {
         BuildingAdapter.ViewHolder view = (BuildingAdapter.ViewHolder) this.recyclerViewBuildings.findViewHolderForAdapterPosition(position);
-        view.layoutStateBuilding.setVisibility(View.VISIBLE);
-        view.layoutStateStopping.setVisibility(View.INVISIBLE);
+        view.setState(BuildingAdapter.ViewHolder.STATE_BUILDING, buildingModel);
         Toast.makeText(this.getApplicationContext(), "Succès", Toast.LENGTH_SHORT).show();
     }
 

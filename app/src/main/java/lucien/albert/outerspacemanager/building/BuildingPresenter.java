@@ -36,6 +36,9 @@ public class BuildingPresenter implements BuildingPresenterInterface{
             @Override
             public void onResponse(Call<BuildingsListModel> call, Response<BuildingsListModel> response) {
                 if (response.isSuccessful()) {
+                    for (BuildingModel buildingModel : response.body().getBuildings()) {
+                        buildingModel.completeFromRealm();
+                    }
                     BuildingPresenter.this.buildingView.onBuildingsListSuccess(response.body());
                 }
             }
@@ -58,7 +61,7 @@ public class BuildingPresenter implements BuildingPresenterInterface{
             public void onResponse(Call<Object> call, Response<Object> response) {
                 if (response.isSuccessful()) {
                     BuildingPresenter.this.buildingDAO.createBuilding(buildingModel);
-                    BuildingPresenter.this.buildingView.onBuildingCreateSuccess(position);
+                    BuildingPresenter.this.buildingView.onBuildingCreateSuccess(position, buildingModel);
                 }
                 else BuildingPresenter.this.buildingView.onBuildingCreateFailure();
             }

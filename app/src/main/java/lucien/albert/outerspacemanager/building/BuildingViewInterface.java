@@ -11,7 +11,7 @@ public interface BuildingViewInterface {
 
     public void onBuildingsListSuccess (BuildingsListModel buildingsListModel);
 
-    public void onBuildingCreateSuccess (Integer position);
+    public void onBuildingCreateSuccess (Integer position, BuildingModel buildingModel);
 
     public void onBuildingCreateFailure ();
 

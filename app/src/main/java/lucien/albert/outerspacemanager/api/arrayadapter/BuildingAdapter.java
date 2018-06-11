@@ -4,6 +4,7 @@ package lucien.albert.outerspacemanager.api.arrayadapter;
 import android.content.Context;
 import android.os.CountDownTimer;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,14 +33,15 @@ public class BuildingAdapter extends RecyclerView.Adapter<BuildingAdapter.ViewHo
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private static final int STATE_STOPPING = 1;
-        private static final int STATE_BUILDING = 2;
+        public static final int STATE_STOPPING = 1;
+        public static final int STATE_BUILDING = 2;
 
         @BindView(R.id.textViewRowBuildingName) public TextView textViewRowBuildingName;
         @BindView(R.id.imageViewRowBuilding) public ImageView imageViewRowBuilding;
         @BindView(R.id.textViewBuildingLevel) public TextView textViewBuildingLevel;
         @BindView(R.id.textViewBuildingResource) public TextView textViewBuildingResource;
         @BindView(R.id.textViewBuildingTime) public TextView textViewBuildingTime;
+        @BindView(R.id.txtRemainingTime) public TextView txtRemainingTime;
         @BindView(R.id.buttonActionBuilding) public Button buttonActionBuilding;
         @BindView(R.id.row_building_state_stopping) public LinearLayout layoutStateStopping;
         @BindView(R.id.row_building_state_building) public LinearLayout layoutStateBuilding;
@@ -69,11 +71,11 @@ public class BuildingAdapter extends RecyclerView.Adapter<BuildingAdapter.ViewHo
         }
 
         public void initStateBuilding (final BuildingModel buildingModel) {
-            ViewHolder.this.circleProgressBuidling.setProgress(buildingModel.getRemainingTime());
+            this.watchRemainingTime(buildingModel);
             ViewHolder.this.countDownTimer = new CountDownTimer(30000, 1000) {
                 @Override
                 public void onTick(long millisUntilFinished) {
-                    ViewHolder.this.circleProgressBuidling.setProgress(buildingModel.getRemainingTime());
+                    ViewHolder.this.watchRemainingTime(buildingModel);
                 }
 
                 @Override
@@ -81,6 +83,18 @@ public class BuildingAdapter extends RecyclerView.Adapter<BuildingAdapter.ViewHo
                     ViewHolder.this.countDownTimer.start();
                 }
             };
+            ViewHolder.this.countDownTimer.start();
+        }
+
+        public void watchRemainingTime (BuildingModel buildingModel) {
+            float time = buildingModel.getRemainingTime();
+            if (time > 100) {
+                buildingModel.setBuilding(false);
+                this.setState(STATE_STOPPING, null);
+            } else {
+                this.txtRemainingTime.setText(DateUtils.formatElapsedTime((long) time));
+                this.circleProgressBuidling.setProgress(time);
+            }
         }
 
     }
